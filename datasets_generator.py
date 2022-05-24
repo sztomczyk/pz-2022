@@ -2,25 +2,26 @@
 import argparse
 from argparse import ArgumentParser
 from csr_generator import generate_csr_matrix
+import numpy as np
 
 
 def generate_datasets():
-    range_from = int(args.get('rf'))
-    range_to = int(args.get('rt'))
-    step = int(args.get('s'))
-    density = float(args.get('d'))
+    density_from = float(args.get('df'))
+    density_to = float(args.get('dt'))
+    step = float(args.get('st'))
+    size = int(args.get('si'))
     path = str(args.get('path'))
 
-    for n in range(range_from, range_to + step, step):
-        generate_csr_matrix(n, density, f'{path}/{n}x{n}_{str(density).replace(".", "_")}')
+    for n in np.arange(density_from, density_to + step, step):
+        generate_csr_matrix(size, n, f'{path}/{size}x{size}_{"{:.1f}".format(n).replace(".", "_")}')
 
 
 if "__main__" == __name__:
     parser = argparse.ArgumentParser(add_help=True)
-    parser.add_argument("-rf", help="range from", default="10")
-    parser.add_argument("-rt", help="range to", default="100")
-    parser.add_argument("-s", help="step", default="10")
-    parser.add_argument("-d", help="density", default="0.5")
+    parser.add_argument("-df", help="density from", default="0.1")
+    parser.add_argument("-dt", help="density to", default="1")
+    parser.add_argument("-st", help="step", default="0.1")
+    parser.add_argument("-si", help="size", default="4")
     parser.add_argument("-path", help="path where datasets should be generated", default="./generated")
     args: dict = vars(parser.parse_args())
 
